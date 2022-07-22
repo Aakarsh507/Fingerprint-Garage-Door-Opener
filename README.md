@@ -1,3 +1,6 @@
 # Fingerprint-Garage-Door-Opener
 
-Made a fingerprint garage door opener intergrated with a temp and humidity sensor to display data on LCD screen. 
+- Have garage open/close on a valid fingerprint 
+- Display humidity and temperature when fingerprint isn’t being scanned 
+
+For more information vist my website ~ https://aakarsh507.github.io
