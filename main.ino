@@ -1,17 +1,17 @@
-//main code file 
-#include <Adafruit_Fingerprint.h>
-#include <LiquidCrystal_I2C.h>
-#include "DHT.h"
+//FINGERPRINT_GARAGE_DOOR_OPENER
+#include <Adafruit_Fingerprint.h> //fingerprint  
+#include <LiquidCrystal_I2C.h> //LCD display 
+#include "DHT.h" //Dht (temp and humdidity)  
 
 #if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
-SoftwareSerial mySerial(2, 3);
+SoftwareSerial mySerial(2, 3); 
 #else
 #define mySerial Serial1
 #endif
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 
-LiquidCrystal_I2C lcd(0x27,16,2); 
+LiquidCrystal_I2C lcd(0x27,16,2); //size of LCD
 
 #define DHTPIN 5     // Digital pin connected to the DHT sensor
 
@@ -22,8 +22,10 @@ DHT dht(DHTPIN, DHTTYPE);
 void setup()
 {
   Serial.begin(9600);
+
+  pinMode (4, OUTPUT); //relay switch setup
+
   Serial.println(F("DHTxx test!"));
-  pinMode (4, OUTPUT);
   dht.begin(); //temp and humidity sensor
   
   //LCD setup
@@ -49,7 +51,7 @@ void setup()
   finger.getTemplateCount();
 }
 
-void loop()                     // run over and over again
+void loop()// run over and over again
 {
   getFingerprintID();
   delay(100);           
@@ -69,7 +71,6 @@ uint8_t getFingerprintID() {
   }
 
   // OK success!
-
   p = finger.image2Tz();
   switch (p) {
     case FINGERPRINT_OK:
@@ -81,19 +82,19 @@ uint8_t getFingerprintID() {
   p = finger.fingerSearch();
   if (p == FINGERPRINT_OK) {
     Serial.println("Found a print match!");
-    digitalWrite (11, HIGH);
+    digitalWrite (4, HIGH); //switches relay on; opens garage 
     lcd.clear();
     lcd.setCursor (0,0);
     lcd.print (" Access Granted");
-    delay (10000);
+    delay (1000);
     lcd.clear();
-    digitalWrite (11, LOW);
+    digitalWrite (4, LOW);
   } else if (p == FINGERPRINT_NOTFOUND) {
     Serial.println("Did not find a match");
     lcd.clear();
     lcd.setCursor (0,0);
     lcd.print ("  Access Denied");
-    delay (2000);
+    delay (1000);
     lcd.clear();
     return p;
   }
