@@ -24,6 +24,7 @@ void setup()
   Serial.begin(9600);
 
   pinMode (4, OUTPUT); //relay switch setup
+  digitalWrite (4, HIGH);
 
   Serial.println(F("DHTxx test!"));
   dht.begin(); //temp and humidity sensor
@@ -82,13 +83,13 @@ uint8_t getFingerprintID() {
   p = finger.fingerSearch();
   if (p == FINGERPRINT_OK) {
     Serial.println("Found a print match!");
-    digitalWrite (4, HIGH); //switches relay on; opens garage 
+    digitalWrite (4, LOW); //switches relay on; opens garage 
     lcd.clear();
     lcd.setCursor (0,0);
     lcd.print (" Access Granted");
     delay (1000);
     lcd.clear();
-    digitalWrite (4, LOW);
+    digitalWrite (4, HIGH);
   } else if (p == FINGERPRINT_NOTFOUND) {
     Serial.println("Did not find a match");
     lcd.clear();
